@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        width: 8.25in;
+        font-size: 8px;
+        margin: 0;
+      }
+
+      .columns {
+        display: flex;
+        justify-content: stretch;
+        width: 8.25in;
+      }
+
+      .columns > div {
+        border: 1px solid black;
+        padding: 3px;
+        width: calc(8.25in / 3);
+      }
+
+      .columns > div:nth-child(n + 1) {
+        border-left: none;
+      }
+
+      h1 {
+        font-size: 14px;
+      }
+
+      h2 {
+        font-size: 12px;
+        border-bottom: 1px solid #aaaaaa;
+        margin-top: 3px;
+        margin-bottom: 3px;
+      }
+
+      h3 {
+        font-size: 10px;
+        margin-top: 3px;
+        margin-bottom: 3px;
+      }
+
+      ul,
+      ol {
+        padding-inline-start: 20px;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin: 0;
+      }
+
+      p {
+        margin-top: 5px;
+        margin-bottom: 5px;
+      }
+
+      .horizontal {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      td {
+        border: 1px dotted black;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      :root:root mjx-container {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+      }
+    </style>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [
+            ["$", "$"],
+            ["\\(", "\\)"],
+          ],
+        },
+        svg: {
+          fontCache: "global",
+        },
+      };
+    </script>
+  </head>
+  <body>
+    <div class="columns">
+      <div>
+        <h2>MLE</h2>
+        <ol>
+          <li>
+            Find an expression for the likelihood/probability of the event
+            you're doing MLE for.
+          </li>
+          <li>
+            Take the logarithm of that likelihood to convert products/quotients
+            to sums/differences and exponents to multiplications.
+          </li>
+          <li>
+            Take the derivative of that likelihood with respect to the
+            hyperparameters you are trying to tune.
+          </li>
+          <li>
+            Set that derivative equal to zero and solve to find the global
+            maximum. If you can't solve analytically, use a technique like
+            gradient descent.
+          </li>
+        </ol>
+        <h2>Confusion Matrix & Precision vs Recall</h2>
+        <table>
+          <tbody>
+            <tr>
+              <th></th>
+              <th>Expected Positive</th>
+              <th>Expected Negative</th>
+            </tr>
+            <tr>
+              <th>Actual Positive</th>
+              <td>True Positive ($TP$)</td>
+              <td>False Negative ($FN$)</td>
+            </tr>
+            <tr>
+              <th>Actual Negative</th>
+              <td>False Positive ($FP$)</td>
+              <td>True Negative ($TN$)</td>
+            </tr>
+          </tbody>
+        </table>
+        <h3>Precision</h3>
+        <p>
+          $\frac{\#TP}{\#TP + \#FP}$ &mdash; Out of everything our model says is
+          true, how much of it is <em>actually</em> true? Higher precision means
+          the model is more stringent as to what it considers a positive, which
+          decreases false positives but also increases false negatives, lowering
+          recall.
+        </p>
+        <p>
+          High precision is important when a false positive is worse than a
+          false negative. A nuclear power's nuclear weapons launch detection
+          system is a good example because a false positive would lead to the
+          country launching its own nukes in retaliation (very bad!), whereas a
+          false negative would result in them getting nuked (also very bad, but
+          it's not like they can really do anything.)
+        </p>
+        <h3>Recall</h3>
+        <p>
+          $\frac{\#TP}{\#TP + \#FN}$ &mdash; Out of everything that's actually
+          true, how much of it did you correctly identify as positive? Higher
+          recall means the model is more liberal as to what it considers a
+          positive, which decreases false negatives but also increases false
+          positives, lowering precision.
+        </p>
+        <p>
+          High recall is important when a false negative is worse than a false
+          positive. For instance, you would want high recall in a smoke alarm
+          because a false negative (it not warning you during a fire) is
+          extremely dangerous while a false positive (it going off for something
+          harmless, e.g. steam from a shower) is a minor inconvenience.
+        </p>
+
+        <h2>Logistic Regression</h2>
+        <p>Goal: Binary classification (Y is 0 or 1).</p>
+        <p>
+          In logistic regression we form a linear transformation and then pass
+          it through the logistic/sigmoid function to represent the probability
+          that the point is $Y=1$.
+        </p>
+        <p>Quite literally a single-layer sigmoid neural network.</p>
+        <div class="horizontal">
+          <h3>Logistic Assumption</h3>
+          <p>
+            $$P(y_i=1|x_i;w)=\theta(w^Tx_i)=\frac{1}{1+e^{-w^Tx_i}}$$
+            $$P(y_i=0|x_i;w)=1-\theta(w^Tx_i)=\frac{-e^{-w^Tx_i}}{1+e^{-w^Tx_i}}$$
+          </p>
+        </div>
+        <div class="horizontal">
+          <h3>Sigmoid</h3>
+          <p>$$\sigma(z)=\frac{1}{1+e^{-z}}$$</p>
+        </div>
+        <div class="horizontal">
+          <h3>Derivative of Sigmoid</h3>
+          <p>$$\frac{d}{dz}\sigma(z)=\sigma(z)\cdot (1-\sigma(z))$$</p>
+        </div>
+        <div class="horizontal">
+          <h3>Linear Decision Boundary</h3>
+          <p>$$w^Tx = 0$$</p>
+        </div>
+        <h3>Advantages</h3>
+        <ul>
+          <li>
+            Can handle nonlinear decision boundaries <em>if and only if</em> you
+            use nonlinear basis functions.
+          </li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>No analytical solution &mdash; you must use gradient descent.</li>
+        </ul>
+
+        <h2>Perceptron</h2>
+        <p>
+          Basically, what if Logistic Regression but online??? (can update
+          itself in realtime, one training example at a time)
+        </p>
+        <p>
+          Aside from being online, perceptron also has no probabilistic backing
+          (it's based on the geometry underlying dot products) and isn't trained
+          with gradient descent.
+        </p>
+        <p>
+          Given $y_i\in\{-1,1\}, we want $y_i=sign(w^Tx_i) \forall i. In other
+          words, we want the <em>sign</em> of our linear decision boundary
+          $w^Tx_i$ to match the y-value, which can be -1 or 1. In other words we
+          want $y_iw^Tx_i>0$
+        </p>
+        <p>
+          $w$ is the vector orthogonal to the decision boundary, so if we
+          misclassify a point, we can point it towards or away from the point in
+          order to classify it properly. We can do this by setting $w = w +
+          \alpha y_ix_i$ if we misclassify a point, where $\alpha$ is some
+          constant.
+        </p>
+        <p>
+          Voted Perceptron is a variant where we use a weighted average of
+          weight matrices. This is better against outliers and
+          non-linearly-separable data.
+        </p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>
+            Online &mdash; can construct the model as we receive training data.
+          </li>
+          <li>Guaranteed to converge for linearly separable data.</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>
+            Results are order-dependent &mdash; we get a different model
+            depending on the order in which the input data are supplied.
+          </li>
+          <li>
+            Correctly-classified training examples can later become
+            misclassified.
+          </li>
+          <li>
+            Can be arbitrarily bad when faced with non-linearly-separable data.
+          </li>
+          <li>Sensitive to outliers.</li>
+        </ul>
+      </div>
+
+      <div>
+        <h2>Sources of Error</h2>
+        <p>
+          <b>Modeling Error</b>: Your model sucks. "Trying to model a quadratic
+          equation with a linear model." This is error representing features of
+          the data that your model literally cannot represent.
+        </p>
+        <p>
+          <b>Estimation Error</b>: Error due to bad/not enough data. If your
+          sample is biased, whether due to poor sampling mechanisms, or even
+          just due to random noise, this is estimation error.
+        </p>
+        <p>
+          <b>Optimization Error</b>: Error due to not enough training. You have
+          a lot of optimization error if you, say, only run a neural network for
+          one epoch.
+        </p>
+        <p>
+          <b>Bayes Error</b>: Irreducible error inherent to the actual structure
+          of the data. As an example, if two distributions &mdash; each
+          corresponding to a different Y-value &mdash; have overlap, then a
+          sample from the overlap could really be part of either distribution.
+          For instance, if you're trying to predict age from height, someone
+          who's 7'0" is likely an adult, whereas someone who's 3'0" is likely a
+          child. However, even if you have infinite data and infinite training
+          time, you can't really be too sure whether someone who's 5'1" is an
+          adult or a child because there exist many adults who are 5'1" and many
+          children who are also 5'1".
+        </p>
+
+        <h2>Bias/Variance Tradeoff</h2>
+        <p>
+          <b>Bias</b> &mdash; How much do you <em>consistently</em> deviate from
+          the actual data?
+        </p>
+        <p>
+          <b>Variance</b> &mdash; Literally just variance from statistics. It's
+          $\sigma^2$. How "spread out" is your data?
+        </p>
+        <p>
+          There's a tradeoff because making a more complex model that tries to
+          capture the patterns in your input data more effectively will lower
+          bias (as it will match the input data more closely) but all those
+          extra "bends" will increase variance. The converse is true as well.
+        </p>
+        <p>
+          As an example, kNN with low $k$ is high variance, low bias.
+          Conversely, kNN with high $k$ is low variance, high bias.
+        </p>
+        <p>
+          As another example, low-degree polynomial regression is low variance,
+          high bias. High degree polynomial regression is high variance, low
+          bias.
+        </p>
+
+        <h2>$k$ Nearest Neighbors (kNN)</h2>
+        <p>
+          Data examples are usually classified similarly to those close to them.
+          Therefore, when testing a new data example $x$, we check the closest
+          $k$ points to it and see how <em>they</em> are classified, picking the
+          majority vote.
+        </p>
+        <p>
+          One variant is weighted kNN, where the "majority vote" is weighted by
+          distance &mdash; i.e. the closer one of the $k$ points is to the point
+          you're testing, the more it influences the result.
+        </p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Very simple to implement.</li>
+          <li>
+            "Lazy" algorithm &mdash; cost of training is essentially free w/o an
+            acceleration structure.
+          </li>
+          <li>Easy to tune &mdash; $k$ is the only hyperparameter.</li>
+          <li>Easy way to get nonlinear decision boundaries.</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>
+            Inference is slow &mdash; without acceleration structures we must
+            check <em>every</em> point to find the closest $k$ points.
+          </li>
+          <li>Prone to overfitting for low $k$.</li>
+          <li>Prone to bias for high $k$.</li>
+          <li>
+            High memory cost &mdash; must store entire training dataset in
+            memory, or stream it into memory dynamically, which would be very
+            slow.
+          </li>
+          <li>
+            Performs poorly in high dimensions because the data approach the
+            "edge of the sphere" making most distances identical.
+          </li>
+          <li>
+            Performs poorly if features aren't normalized &mdash; if feature A
+            ranges from -100 to 100 while feature B ranges from -1 to 1, then
+            feature A will have a far greater impact on the results than feature
+            B.
+          </li>
+        </ul>
+
+        <h2>Naive Bayes</h2>
+        <p>
+          If we have $d$ categorical features $x_1$ through $x_{d}$ and one
+          categorical output $y$, then we can construct a joint probability
+          distribution table for these inputs. The problem is that foro every
+          new $x_i$ we add, we multiply the size of the table by the number of
+          options $x_i$ can take to account for every possibility.
+        </p>
+        <p>
+          Because exponentially growing tables are a pain to work with, Naive
+          Bayes assumes that $x_1$ through $x_{d}$ are conditionally independent
+          given $y_i$. This implies that $P(x|y)=\prod_{i=1}^{d}P(x_i|y)$.
+        </p>
+        <p></p>
+      </div>
+      <div>
+        <h2>Probability</h2>
+        <div class="horizontal">
+          <h3>Bayes' Rule</h3>
+          <p>$P(A|B) = \frac{P(B|A)P(A)}{P(B)}$</p>
+        </div>
+        <h3>Independence</h3>
+        <p>
+          $P(A,B) = P(A)P(B)$ &mdash; Knowing $A$ doesn't influence the
+          probability of $B$, or vice-versa.
+        </p>
+        <h3>Conditional Independence</h3>
+        <p>
+          $P(A|B,C) = P(A|C)$, or, equivalently, $P(A,B|C) = P(A|C)P(B|C)$
+          &mdash; If we know $C$, then $A$ and $B$ are independent. We say that
+          $A$ and $B$ are conditionally independent given $C$.
+        </p>
+        <p>
+          For instance, height ($A$) and vocabulary ($B$) size may
+          <em>seem</em> dependent (the taller someone is, the more words they
+          know, and vice-versa), but if we consider their age ($C$) then height
+          and vocabulary are independent &mdash; for everyone of a given age,
+          their height and vocabulary are independent. As an example, knowing
+          the height of an eight-year-old doesn't tell us anything about how big
+          that eight-year-old's vocabulary is.
+        </p>
+        <div class="horizontal">
+          <h3>Entropy</h3>
+          <p>$$H(X)=-\sum_{x\in X}p(x)\log(p(x))$$</p>
+        </div>
+        <div class="horizontal">
+          <h3>Conditional Entropy</h3>
+          <p>$$H(Y|X)=-\sum_{x\in X,y\in Y}p(x,y)\log(p(y|x))$$</p>
+        </div>
+
+        <h2>Overfitting</h2>
+        <p>
+          Overfitting is when your model is specifically good at predicting its
+          own training data, but fails to generalize to other data. It's the ML
+          equivalent of "teaching to the test" rather than teaching practical
+          skills.
+        </p>
+
+        <h2>Linear Regression</h2>
+        <p>
+          Produce the line, plane, or hyperplane of best fit (depending on
+          dimensionality) based on some input features $x_0$, $x_1$, $x_2$, etc.
+        </p>
+        <p>
+          Technically a generative method where the $y$-values are assumed to
+          follow the line/surface of best fit, plus some amount of Gaussian
+          noise.
+        </p>
+        <p>
+          Nonlinear basis functions can also be added to capture nonlinear
+          relationships. For instance, $x_0^2$ could be added as an input
+          feature to capture a quadratic relationship between $x_0$ and $y$
+        </p>
+        <p>
+          Linear regression tends to overfit (consider the bends of a
+          high-degree polynomial regression). This is especially true with high
+          weights, because a high weight means a small change to input leads to
+          a large change to output, which leads to very strong bends. To prevent
+          this, use regularization &mdash; an extra "regularization penalty" is
+          added to "incentivize" weights to become lower or even zero. This is a
+          <em>prior</em> because we're acting as if we already have an idea of
+          what the model should look like &mdash; that it should be "simple."
+        </p>
+        <div class="horizontal">
+          <h3>LinReg Weights</h3>
+          <p>$$w^*=(X^TX)^{-1}X^Ty$$</p>
+        </div>
+        <div class="horizontal">
+          <h3>LinReg Weights (w/ Regularization)</h3>
+          <p>$$w^*=(X^TX+\lambda I)^{-1}X^Ty$$</p>
+        </div>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Fast to train.</li>
+          <li>Has an analytical (exact) solution.</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>
+            Prone to overfitting with too many features and without
+            regularization.
+          </li>
+          <li>Prone to bias with too much regularization</li>
+          <li>Very sensitive to outliers.</li>
+        </ul>
+        <h3>Regression Strategies</h3>
+        <p>
+          <b>Ridge Regression</b> &mdash; Penalizes the L2-norm &mdash; i.e. the
+          deviation from expected, squared. Denser weights. Easy to compute.
+        </p>
+        <p>
+          <b>Lasso Regression</b> &mdash; Penalizes the L1-norm &mdash; i.e. the
+          abs value of deviation from expected. Sparser weights. Harder to
+          compute.
+        </p>
+        <p>
+          <b>L0 or Sparse Regression</b> &mdash; Penalizes the number of nonzero
+          weights. NP-complete! Requires combinatoric optimization.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
