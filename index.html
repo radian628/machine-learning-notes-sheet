@@ -498,6 +498,55 @@
           cross the boundary because, since the training dataset was far away
           from the boundary, new points probably will be as well.
         </p>
+        <h3>The Math</h3>
+        <p>$w^Tx+b&gt;0\to y=1$</p>
+        <p>$w^Tx+b&lt;0\to y=-1$</p>
+        <p>
+          Therefore, a point $x_i$ is classified correctly if $y_i(w^Tx_i+b)>0$.
+          This is our constraint.
+        </p>
+        <p>
+          Shortest distance from our point to the decision boundary is
+          $d=\frac{w^Tx_i+b}{||w||}$.
+        </p>
+        <p>
+          Distance to the nearest point is
+          $d_{min}=\underset{i}{\min}\frac{|w^Tx_i+b|}{||w||}$.
+        </p>
+        <p>
+          And we want to set $w$ and $b$ to <em>maximize</em> this distance:
+          $\underset{i}{\max}\underset{w,b}{\min}\frac{|w^Tx_i+b|}{||w||}$.
+          Which is, to put it lightly, a pain to solve directly.
+        </p>
+        <p>
+          Let's then say we want to force all distances to be at least
+          $\frac{1}{||w||}$. I.e. $\frac{|w^Tx_i+b|}{||w||}\ge \frac{1}{||w||}
+          \forall i$. This is fine because as long as the distance is positive,
+          we can just scale up the weights which makes $||w||$ bigger and thus
+          makes $\frac{1}{||w||}$ smaller (provided it stays $>0$). The end
+          result is that we're forced to have a positive, nonzero margin.
+        </p>
+        <p>Multiplying by $||w||$ yields $|w^Tx_i+b|\ge 1 \forall i$</p>
+        <p>
+          We can combine both of our conditions together &mdash;
+          $y_i(w^Tx_i+b)>0$ (making sure our points are correct) and
+          $|w^Tx_i+b|\ge 1$ (establishing a margin) to create the following
+          combined constraint, which is only true when both constraints are
+          true:
+        </p>
+        <p>$$y_i(w^Tx_i+b)\ge 1$$</p>
+        <p>
+          The margin $\lambda$ itself is equal to
+          $\frac{2}{w^Tw}=\frac{2}{||w||_2^2}$. We can also directly say
+          $\underset{w,b}{\max}\frac{2}{||w||_2^2}$ to say we want to maximize
+          it (subject to the constraint). By taking the inverse we can
+          equivalently say we want to solve
+          $\underset{w,b}{\min}\frac{1}{2}w^Tw$.
+        </p>
+        <p>
+          We can solve $\underset{w,b}{\min}w^Tw$ such that $y_i(w^Tx_i+b)\ge
+          1\forall i$ using Quadratic Programming!
+        </p>
         <h3>Advantages</h3>
         <ul>
           <li>
