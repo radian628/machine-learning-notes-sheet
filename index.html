@@ -485,6 +485,39 @@
           <b>L0 or Sparse Regression</b> &mdash; Penalizes the number of nonzero
           weights. NP-complete! Requires combinatoric optimization.
         </p>
+
+        <h2>Support Vector Machines</h2>
+        <p>
+          Intuition: If we are trying to use a linear boundary to separate our
+          dataset based on a binary class label $y$, we want the linear boundary
+          to be as far away from the data as possible without misclassifying any
+          points, producing a "margin" between the boundary and the closest data
+          points. We want to make this margin as big as possible to give
+          ourselves "wiggle room" when we attempt to generalize the model
+          &mdash; With a larger margin, new points are probably less likely to
+          cross the boundary because, since the training dataset was far away
+          from the boundary, new points probably will be as well.
+        </p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>
+            Has an exact solution that can be found via a QP (Quadratic
+            Programming) solver.
+          </li>
+          <li>
+            Can be effectively nonlinear if nonlinear basis functions are used
+            via the kernel trick.
+          </li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>QP solvers are complicated.</li>
+          <li>
+            Has no probabilistic interpretation &mdash; is based purely on
+            geometry (how to make margin big?)
+          </li>
+          <li>Kernel SVMs can increase overfitting.</li>
+        </ul>
       </div>
     </div>
   </body>
