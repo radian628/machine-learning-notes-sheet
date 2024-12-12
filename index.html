@@ -348,6 +348,18 @@
             prone to overfitting.
           </li>
         </ul>
+
+        <h2>Kernel Density Estimation</h2>
+        <p>
+          Main idea: Treat each data point as the mean of a probability
+          distribution (e.g. a gaussian) and average them all out.
+        </p>
+        <p>
+          For gaussian KDEs, the variance $\sigma$ can be adjusted &mdash; lower
+          $\sigma$ leads to more "bumps" appearing in the resulting distribution
+          (high variance, low bias), while higher $\sigma$ leads to the
+          distribution becoming smoother (low variance, high bias).
+        </p>
       </div>
 
       <div>
