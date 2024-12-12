@@ -255,6 +255,77 @@
           </li>
           <li>Sensitive to outliers.</li>
         </ul>
+
+        <h2>Ensemble Models</h2>
+        <p>
+          Ensemble models are what you get when you combine many different
+          individual models together. They are what is often used in practice
+          because they offer better results than just an individual model.
+          Ensembles work best when they have uncorrelated errors &mdash; with
+          correlated errors, an ensemble will keep on making the same mistakes
+          in the same way.
+        </p>
+        <p>
+          <b>Bagging:</b> Training many copies of a model and then averaging out
+          the models' results, or taking the majority vote. Works best on
+          high-variance, low-bias learners (strong learners) as that way the
+          bagged model can still capture the "bends" of the data while also
+          smoothing out the variance.
+        </p>
+        <p>
+          <b>Boosting:</b> Training models in sequence, where each model focuses
+          on parts of the input space that previous models failed to predict
+          effectively. Works best on low-variance, high-bias learners (weak
+          learners) because even though they are biased, they still might be
+          excellent at predicting a small part of the input space.
+        </p>
+        <p>Boosting is bad with high-dimensionality data</p>
+
+        <h2>Decision Trees</h2>
+        <p>
+          The idea of a decision tree is that to predict the output, you
+          repeatedly subdivide the input space, recursively "splitting" on
+          different input features until you know the output for sure given the
+          input.
+        </p>
+        <p>
+          This is often done greedily by maximizing the information gain $H(Y) -
+          H(Y|A)$ on each split, where $Y$ is the class label and $A$ is an
+          input feature.
+        </p>
+        <p>
+          Unfortunately, constructing the smallest decision tree (and therefore
+          the fastest and least likely to overfit) such that it predicts the
+          class label most effectively is an NP-Hard problem.
+        </p>
+        <p>
+          Decision trees can also do regression by picking the average Y-value
+          of every point in any given leaf node.
+        </p>
+        <p>A bagged decision tree is called a random forest.</p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>
+            Decision trees can be explained to and read by humans. They're
+            practically just flowcharts.
+          </li>
+          <li>
+            Can be tuned to be low-variance, high-bias (very shallow decision
+            trees) or high-variance, low-bias (very deep decision trees)
+            learners.
+          </li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>
+            Decision trees do not scale well to high-dimesnionality datasets.
+            This is because the number of splits becomes intractable.
+          </li>
+          <li>
+            Without any sort of limit placed on their growth, decision trees are
+            prone to overfitting.
+          </li>
+        </ul>
       </div>
 
       <div>
@@ -267,7 +338,10 @@
         <p>
           <b>Estimation Error</b>: Error due to bad/not enough data. If your
           sample is biased, whether due to poor sampling mechanisms, or even
-          just due to random noise, this is estimation error.
+          just due to random noise, this is estimation error. Because a prior
+          acts as an assumption about our data, a prior &mdash; or anything that
+          acts like a prior &mdash; also impacts estimation error. For example,
+          regularization will reduce estimation error.
         </p>
         <p>
           <b>Optimization Error</b>: Error due to not enough training. You have
@@ -379,7 +453,56 @@
           Bayes assumes that $x_1$ through $x_{d}$ are conditionally independent
           given $y_i$. This implies that $P(x|y)=\prod_{i=1}^{d}P(x_i|y)$.
         </p>
-        <p></p>
+
+        <h2>Neural Networks</h2>
+        <p>
+          In a very broad sense, a neural network is just a very complicated
+          equation with a lot of parameters. The equation has a loss function
+          that describes how badly it performs. Your goal is to minimize the
+          loss function. To do this, evaluate the gradient of the loss function
+          with respect to the parameters and then tweak the parameters by moving
+          them along the gradient by a small amount.
+        </p>
+        <p>
+          In practice, many neural networks are formed into "layers" of values,
+          where each value is called a "neuron". The next layer will take a
+          weighted sum of all the neurons in the previous layer, add them
+          together, add a bias, and then pass that through an activation
+          function like the logistic function $\frac{1}{1 + e^{-x}}$ or ReLU
+          ($max(0, x)$). In short, $a = \sigma\left(b+\sum_{i=1}^d w_ix_i\right)
+          = \sigma(b+w^Tx)$
+        </p>
+        <p>
+          Other activation functions include
+          $\tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}$ and
+          $\operatorname{LeakyReLU}(z)={\alpha z \operatorname{if} z &lt; 0
+          \operatorname{otherwise} z}$.
+        </p>
+        <h3>Loss Functions</h3>
+        <div class="horizontal">
+          <h3>Squared Error</h3>
+          <p>$L(a,b)=(a-b)^2$</p>
+        </div>
+        <div class="horizontal">
+          <h3>Absolute Error</h3>
+          <p>$L(a,b)=|a-b|$</p>
+        </div>
+        <div class="horizontal">
+          <h3>Huber</h3>
+          <p>
+            $L(a,b)=\begin{cases}\frac{1}{2}(a-b)^2 & \operatorname{if} |a-b|
+            &lt; \delta \\ \delta|a-b|-\frac{1}{2}\delta^2 & \operatorname{else}
+            \end{cases}$
+          </p>
+        </div>
+        <div class="horizontal">
+          <h3>Cross Entropy</h3>
+          <p>$L(a,b)=-E_b[log(a)]=-\sum_{i=0}^c b_i log(a_i)$</p>
+        </div>
+        <div class="horizontal">
+          <h3>Hinge</h3>
+          <p>$L(a,b)=-\sum_{i=0}^c max(0,\delta-b_ia_i)$</p>
+        </div>
       </div>
       <div>
         <h2>Probability</h2>
