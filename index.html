@@ -302,9 +302,29 @@
           Decision trees can also do regression by picking the average Y-value
           of every point in any given leaf node.
         </p>
-        <p>A bagged decision tree is called a random forest.</p>
+        <h3>Random Forests</h3>
+        <p>
+          A bagged decision tree is called a random forest. Because decision
+          trees tend to split on the same attributes first even with resampling
+          of the data with replacement, we can fix this by forcing each tree to
+          only split on a subset of the attributes, often only $\sqrt{d}$ of
+          them.
+        </p>
         <h3>Options for reducing overfitting</h3>
-        <ul></ul>
+        <ul>
+          <li>
+            Limit tree size directly (limiting depth, limiting node count, only
+            split if there's enough datapoints)
+          </li>
+          <li>
+            Stop splitting when <em>validation</em> performance
+            plateaus/saturates.
+          </li>
+          <li>
+            Greedily prune the tree, repeatedly removing the node that most
+            improves validation performance.
+          </li>
+        </ul>
         <h3>Advantages</h3>
         <ul>
           <li>
@@ -505,6 +525,83 @@
           <h3>Hinge</h3>
           <p>$L(a,b)=-\sum_{i=0}^c max(0,\delta-b_ia_i)$</p>
         </div>
+
+        <h2>Evaluating Clustering</h2>
+        <h3>Rand Index</h3>
+        <p>
+          A metric for evaluating clustering $P$ with a ground truth label set
+          $G$. For each pair of data points, count the number which are...
+        </p>
+        <ul>
+          <li>$a$: In the same group in $P$ and $G$</li>
+          <li>$b$: In the same group in $P$ but different in $G$</li>
+          <li>$c$: In different groups in $P$ but same in $G$</li>
+          <li>$d$: In different groups in both $P$ and $G$</li>
+        </ul>
+        <p>The Rand Index is thus equal to $\frac{a+d}{a+b+c+d}$.</p>
+        <h3>Purity</h3>
+        <p>
+          What fraction of the points in a cluster would be correctly classified
+          by a "majority vote"? For instance, if you're classifying images of
+          cats and dogs and 90 of a given cluster's images are
+          <em>actually</em> cats, while 10 are dogs, then that cluster has a
+          purity of 0.9, because $\frac{90}{90 + 10} = \frac{90}{100} = 0.9$ of
+          cats "win" the "majority vote."
+        </p>
+
+        <h2>K-means Clustering</h2>
+        <p>
+          Main idea: Figure out how data are structured naturally by splitting
+          them into $k$ different clusters. Each data point is assigned to the
+          cluster whose centroid is closest to it.
+        </p>
+        <p>
+          Centroids are initialized either to random points, or via a smarter
+          heuristic that might, for instance, spread them out.
+        </p>
+        <p>
+          They are then repeatedly assigned to the mean position of all the
+          points closest to them.
+        </p>
+        <p>
+          This is guaranteed to converge to a local optimum for convex,
+          differentiable error functions, such as SSE (sum of squared error). In
+          this case, SSE refers to the sum of the squared distances of each
+          point to its closest centroid.
+        </p>
+        <p>
+          K-medioids (where we set each centroid to the median position) is a
+          variant that is more robust against outliers but is harder to compute.
+        </p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Very fast.</li>
+          <li>Guaranteed to converge to a local optimum.</li>
+          <li>Very simple to implement.</li>
+          <li>
+            Monotonic &mdash; every iteration will only decrease the SSE or keep
+            it constant. It can't get worse.
+          </li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>
+            Does not handle nonspherical, differently-sized clusters well.
+          </li>
+          <li>Sensitive to initial placement of centroids.</li>
+          <li>
+            Sensitive to outliers because the algorithm relies on the mean.
+          </li>
+          <li>
+            SSE cannot be used to determine the optimal $k$ because higher $k$
+            generally means lower SSE.
+          </li>
+          <li>
+            Cluster correspondence tends to be inconsistent (i.e. the cluster
+            marked as A in one run of k-means might be marked as B in the next
+            run)
+          </li>
+        </ul>
       </div>
       <div>
         <h2>Probability</h2>
