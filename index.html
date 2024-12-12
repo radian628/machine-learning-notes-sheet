@@ -789,6 +789,70 @@
           </li>
           <li>Kernel SVMs can increase overfitting.</li>
         </ul>
+
+        <h2>Gaussian Mixture Models</h2>
+        <p>
+          What if you took your dataset and tried to represent its probability
+          distribution as a bunch of gaussian distributions added together? You
+          can also do clustering by seeing which gaussian has the highest weight
+          for a given point. Gaussian formula is below:
+        </p>
+        <p>
+          $$
+          N(x;\mu,\Sigma)=\frac{1}{(2\pi)^\frac{d}{2}|\Sigma|^\frac{1}{2}}e^{-(x-\mu)^T\Sigma^{-1}(x-\mu)}
+          $$
+        </p>
+        <p>
+          GMMs can have different degrees of flexibility based on how complex
+          the variance matrices need to be.
+        </p>
+        <h3>Isotropic</h3>
+        <p>Isotropic matrices produces "spherical" gaussians.</p>
+        <p>
+          $$ \Sigma=\begin{bmatrix} \sigma^2 & 0 \\ 0 & \sigma^2 \\
+          \end{bmatrix} $$
+        </p>
+        <h3>Axis-Aligned</h3>
+        <p>
+          Axis-Aligned matrices produces "elliptical" gaussians. However, these
+          gaussians are only stretched out orthogonally (horizontally or
+          vertically, etc.) and don't appear "rotated."
+        </p>
+        <p>
+          $$ \Sigma=\begin{bmatrix} \sigma_1^2 & 0 \\ 0 & \sigma_2^2 \\
+          \end{bmatrix} $$
+        </p>
+        <h3>Full Covariance</h3>
+        <p>
+          All gaussians are possible &mdash; they can be stretched and skewed in
+          any which way via any linear transformation.
+        </p>
+        <p>
+          $$ \Sigma=\begin{bmatrix} \sigma_1^2 & \sigma_{12} \\ \sigma_{21} &
+          \sigma_2^2 \\ \end{bmatrix} $$
+        </p>
+        <h3>Advantages</h3>
+        <ul>
+          <li>
+            Can handle non-spherical clustering. Even isotropic models can
+            handle differently-sized spheres, unlike k-means, as the gaussian
+            can change in size.
+          </li>
+          <li>
+            Expectation Maximization is guaranteed to converge to a local (not
+            global) optimum.
+          </li>
+          <li>
+            Gives an actual probability distribution, not just cluster
+            assignments. New data can then be generated from the GMM.
+          </li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>No closed-form solution.</li>
+          <li>More complex than k-Means.</li>
+          <li>Slower than k-Means.</li>
+        </ul>
       </div>
     </div>
   </body>
