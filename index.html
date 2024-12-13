@@ -540,6 +540,10 @@
           = \sigma(b+w^Tx)$
         </p>
         <p>
+          Theoretically Universal Approximator &mdash; A finite two-layer neural
+          network can approximate any function arbitrarily well.
+        </p>
+        <p>
           Other activation functions include
           $\tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}}$ and
           $\operatorname{LeakyReLU}(z)={\alpha z \operatorname{if} z &lt; 0
@@ -570,6 +574,15 @@
           <h3>Hinge</h3>
           <p>$L(a,b)=-\sum_{i=0}^c max(0,\delta-b_ia_i)$</p>
         </div>
+        <h3>Advantages</h3>
+        <ul>
+          <li>Ridiculously flexible.</li>
+        </ul>
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>Data-hungry &mdash; NNs require lots of data.</li>
+          <li>Can take a long time to train.</li>
+        </ul>
 
         <h2>Evaluating Clustering</h2>
         <h3>Rand Index</h3>
@@ -707,11 +720,15 @@
         </p>
         <div class="horizontal">
           <h3>Entropy</h3>
-          <p>$$H(X)=-\sum_{x\in X}p(x)\log(p(x))$$</p>
+          <p>$$H(X)=-\sum_{x\in X}P(x)\log_2(P(x))$$</p>
+        </div>
+        <div class="horizontal">
+          <h3>Continuous Entropy</h3>
+          <p>$$H(X)=-\int_{y\in Y}P(Y=y)\log_2(P(Y=y)) dy$$</p>
         </div>
         <div class="horizontal">
           <h3>Conditional Entropy</h3>
-          <p>$$H(Y|X)=-\sum_{x\in X,y\in Y}p(x,y)\log(p(y|x))$$</p>
+          <p>$$H(Y|X)=-\sum_{x\in X,y\in Y}P(x,y)\log_2(P(y|x))$$</p>
         </div>
 
         <h2>Overfitting</h2>
