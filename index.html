@@ -275,10 +275,11 @@
         </p>
         <p>
           <b>Boosting:</b> Training models in sequence, where each model focuses
-          on parts of the input space that previous models failed to predict
-          effectively. Works best on low-variance, high-bias learners (weak
-          learners) because even though they are biased, they still might be
-          excellent at predicting a small part of the input space.
+          on parts of the input space that the previous models in the ensemble
+          failed to predict effectively. Works best on low-variance, high-bias
+          learners (weak learners) because even though they are biased, they
+          still might be excellent at predicting a small part of the input
+          space.
         </p>
         <p>Boosting is bad with high-dimensionality data</p>
 
@@ -322,8 +323,9 @@
             plateaus/saturates.
           </li>
           <li>
-            Greedily prune the tree, repeatedly removing the node that most
-            improves validation performance.
+            Post pruning: Greedily prune the tree, repeatedly removing the node
+            that most improves validation performance. Replace the results with
+            the majority vote of the nodes that would reach this leaf.
           </li>
         </ul>
         <h3>Advantages</h3>
@@ -360,6 +362,15 @@
           $\sigma$ leads to more "bumps" appearing in the resulting distribution
           (high variance, low bias), while higher $\sigma$ leads to the
           distribution becoming smoother (low variance, high bias).
+        </p>
+
+        <h2>PCA</h2>
+        <p>
+          Find the directions in a multidimensional dataset which capture the
+          most variance. Used to reduce dimensionality by capturing the
+          dimensions with the most variance and excluding others. Only captures
+          linear subspaces in data. Eigenvalues tell you how much variance was
+          captured.
         </p>
       </div>
 
@@ -399,7 +410,8 @@
         <h2>Bias/Variance Tradeoff</h2>
         <p>
           <b>Bias</b> &mdash; How much do you <em>consistently</em> deviate from
-          the actual data?
+          the actual data across multiple models trained on subsamples of the
+          dataset?
         </p>
         <p>
           <b>Variance</b> &mdash; Variance, in this context, describes the
