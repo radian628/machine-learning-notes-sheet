@@ -279,7 +279,9 @@
           the models' results, or taking the majority vote. Works best on
           high-variance, low-bias learners (strong learners) as that way the
           bagged model can still capture the "bends" of the data while also
-          smoothing out the variance.
+          smoothing out the variance. In bagging, the models are trained with
+          resamplings of the data which are created by sampling with replacement
+          from the original dataset.
         </p>
         <p>
           <b>Boosting:</b> Training models in sequence, where each model focuses
@@ -290,6 +292,21 @@
           space.
         </p>
         <p>Boosting is bad with high-dimensionality data</p>
+        <p>
+          <b>L2 Boosting:</b> A type of boosting that works for regression.
+          Start with a model and then find out what error it has. Then, train
+          another model to predict that model's error, so you can cancel it out.
+          Then, train <em>another</em> model to predict the boosted model's
+          error, so you can cancel <em>it</em> out. Rinse and repeat.
+        </p>
+        <p>
+          <b>AdaBoost:</b> Works for classification. Weight each datapoint so
+          that some are more "important" than others. Mark misclassified points
+          as being more important after each classifier is trained. In the final
+          boosted model, we classify by checking the sign of a weighted sum of
+          our models, weighting our classifiers based on how well they classify.
+          Uses exponential loss. $e^{-yf(x)}$
+        </p>
 
         <h2>Decision Trees</h2>
         <p>
@@ -384,13 +401,25 @@
           </li>
         </ul>
 
-        <h2>PCA</h2>
+        <h2>PCA (Principal Component Analysis)</h2>
         <p>
           Find the directions in a multidimensional dataset which capture the
           most variance. Used to reduce dimensionality by capturing the
           dimensions with the most variance and excluding others. Only captures
           linear subspaces in data. Eigenvalues tell you how much variance was
           captured.
+        </p>
+        <p>
+          Long story short, find a covariance matrix for your data, find its
+          eigenvalues/eigenvectors, and the largest eigenvalues/eigenvectors
+          represent your principal components.
+        </p>
+        <p>Problem with PCA is that it only works for linear subspaces.</p>
+        <p>
+          t-SNE is another method that works for finding non-linear subspaces.
+          Long story short, it tries to find a lower-dimensional representation
+          that preserves distances between points that were present in the
+          higher dimensional representation. It's done with gradient descent.
         </p>
       </div>
 
@@ -574,6 +603,15 @@
           <h3>Hinge</h3>
           <p>$L(a,b)=-\sum_{i=0}^c max(0,\delta-b_ia_i)$</p>
         </div>
+        <h3>Autoencoders</h3>
+        <p>
+          A neural network trained to be an identity function, except with a
+          lower-dimensional "bottleneck" layer in the middle. If the NN can
+          accurately reconstruct the data despite this bottleneck layer, then
+          the data can be boiled down to fewer dimensions. Therefore, if we
+          extract the data as it is going through the bottleneck layer, we've
+          reduced its dimensionality.
+        </p>
         <h3>Advantages</h3>
         <ul>
           <li>Ridiculously flexible.</li>
@@ -623,7 +661,9 @@
         </p>
         <p>
           They are then repeatedly assigned to the mean position of all the
-          points closest to them.
+          points closest to them. This is a form of coordinate descent, where we
+          alternate between optimizing the centroids' positions and their
+          assignments.
         </p>
         <p>
           This is guaranteed to converge to a local optimum for convex,
@@ -637,7 +677,7 @@
         </p>
         <h3>Advantages</h3>
         <ul>
-          <li>Very fast.</li>
+          <li>Very fast. $O(mknd)$ time.</li>
           <li>Guaranteed to converge to a local optimum.</li>
           <li>Very simple to implement.</li>
           <li>
@@ -648,7 +688,8 @@
         <h3>Disadvantages</h3>
         <ul>
           <li>
-            Does not handle nonspherical, differently-sized clusters well.
+            Does not handle nonspherical, differently-sized, or
+            differently-shaped clusters well.
           </li>
           <li>Sensitive to initial placement of centroids.</li>
           <li>
@@ -933,7 +974,9 @@
           </li>
           <li>
             Expectation Maximization is guaranteed to converge to a local (not
-            global) optimum.
+            global) optimum. It's similar to K-means where the gaussians are
+            shifted such that they more "confidently" classify most points as
+            being "closest" to them.
           </li>
           <li>
             Gives an actual probability distribution, not just cluster
@@ -948,6 +991,14 @@
           <li>
             Bad with high dimensionality &mdash; Gaussians are basically
             distance checking.
+          </li>
+          <li>
+            If a gaussian is centered on only a single point, it can become a
+            "singularity" with zero variance and one infinite point.
+          </li>
+          <li>
+            Identifiability issues &mdash; sometimes, maxima can be freely
+            exchanged without changing model quality.
           </li>
         </ul>
       </div>
