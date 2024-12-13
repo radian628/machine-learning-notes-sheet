@@ -552,6 +552,10 @@
           <li>$d$: In different groups in both $P$ and $G$</li>
         </ul>
         <p>The Rand Index is thus equal to $\frac{a+d}{a+b+c+d}$.</p>
+        <p>
+          Adjusted Rand Index: "normalize" your rand index by comparing it to a
+          random clustering of the data.
+        </p>
         <h3>Purity</h3>
         <p>
           What fraction of the points in a cluster would be correctly classified
@@ -613,6 +617,33 @@
             Cluster correspondence tends to be inconsistent (i.e. the cluster
             marked as A in one run of k-means might be marked as B in the next
             run)
+          </li>
+        </ul>
+
+        <h2>Hierarchical Agglomerative Clustering (HAC)</h2>
+        <p>
+          Start with every point in its own cluster and recursively merge
+          clusters until there's only one left.
+        </p>
+        <p>
+          To do this we have to figure out how "close" clusters together are so
+          we know which ones to merge first. We repeatedly merge the two
+          clusters with the lowest distance and then recalculate the distances.
+        </p>
+        <ul>
+          <li>
+            Single-link: Distance between the two nearest points in the
+            clusters. Tends to "chain" &mdash; gradually adds more examples to a
+            cluster, creating really long clusters.
+          </li>
+          <li>
+            Complete-link: Distance between the two furthest points in the
+            clusters.
+          </li>
+          <li>Centroid: Distance between the cluster means.</li>
+          <li>
+            Average-link: Average distance between all cross-cluster pairs.
+            <em>This is the most robust of the methods.</em>
           </li>
         </ul>
       </div>
