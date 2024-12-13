@@ -95,6 +95,14 @@
   <body>
     <div class="columns">
       <div>
+        <h2>Curse of Dimensionality</h2>
+        <p>
+          Any model relying on distance checking scales poorly to high
+          dimensions. Every point ends up close to the "surface" of the
+          hypersphere and distances cease to matter. This includes any models
+          that involve gaussians, as gaussians are based on distances from the
+          mean.
+        </p>
         <h2>MLE</h2>
         <ol>
           <li>
@@ -363,6 +371,18 @@
           (high variance, low bias), while higher $\sigma$ leads to the
           distribution becoming smoother (low variance, high bias).
         </p>
+
+        <h3>Disadvantages</h3>
+        <ul>
+          <li>
+            KDE is terrible for high dimensions because all the points become
+            "far away" and therefore probabilities of points are near zero.
+            Also, a Gaussian is just a distance check, and anything relying on
+            distance is terrible for high dimensions. If you just tried to
+            increase the variance to fix this issue, your KDE would effectively
+            just become a uniform distribution. Very high bias, low variance.
+          </li>
+        </ul>
 
         <h2>PCA</h2>
         <p>
@@ -908,6 +928,10 @@
           <li>No closed-form solution.</li>
           <li>More complex than k-Means.</li>
           <li>Slower than k-Means.</li>
+          <li>
+            Bad with high dimensionality &mdash; Gaussians are basically
+            distance checking.
+          </li>
         </ul>
       </div>
     </div>
